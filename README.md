@@ -32,20 +32,25 @@ Install the following dependencies:
   * Mac: same instructions as make - [install Xcode command line tools](https://developer.apple.com/xcode/features/)
   * Windows: recommend using [MinGW](http://www.mingw.org/)
 * ```IO2D```
-  * For ```Ubuntu >=22.04.5```, see below
-  * **For other operating systems, [see here](https://github.com/cpp-io2d/P0267_RefImpl/blob/master/BUILDING.md)**. If you have trouble installing, refer to these supplemental guides:
+  * For ```Ubuntu=20.04.6```, see below
+  * If you have trouble installing, refer to these supplemental guides:
     * [MacOS](https://github.com/mylescallan/OpenStreetMaps_C-/blob/master/README.md)
-    * [Ubuntu < 22.04.05](https://github.com/dbecad/CppND-Route-Planning-Project/blob/master/Ubuntu16.4_Install.md#compile-io2d)
+    * [Ubuntu < 20.04.6](https://github.com/dbecad/CppND-Route-Planning-Project/blob/master/Ubuntu16.4_Install.md#compile-io2d)
     * [Windows](https://knowledge.udacity.com/questions/42416)
-  * **Instructions for installing on ```Ubuntu >=22.04.5```**:
+  * **Instructions for installing on ```Ubuntu=20.04.6```**:
 ```
+sudo apt update
+sudo apt install -y build-essential libcairo2-dev libgraphicsmagick1-dev libpng-dev git
 git clone --recurse-submodules https://github.com/cpp-io2d/P0267_RefImpl
 cd P0267_RefImpl
-mkdir Debug
-cmake -S .. -D CMAKE_BUILD_TYPE=Debug -DIO2D_WITHOUT_TESTS=1
-cmake --build .. --config Debug
-make
-sudo make install
+mkdir build && cd build
+cmake -DCMAKE_BUILD_TYPE=Release \
+      -DCMAKE_CXX_STANDARD=17 \
+      -DCMAKE_CXX_STANDARD_REQUIRED=ON \
+      -DIO2D_WITHOUT_SAMPLES=ON \
+      -DIO2D_DEFAULT=CAIRO_XLIB ..
+cmake --build . --parallel $(nproc)
+sudo cmake --install .
 ```
 
 ### 2. Compile
