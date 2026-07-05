@@ -29,7 +29,7 @@ static std::optional<std::vector<std::byte>> ReadFile(const std::string &path)
 }
 
 // function to read user input (does error handling if a wrong input is provided)
-static void readCoordinate(const std::string prompt, float& value) {
+static void readCoordinate(const std::string &prompt, float &value) {
     while(true) {
         std::cout << prompt;
 
