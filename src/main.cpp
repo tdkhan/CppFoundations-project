@@ -33,7 +33,7 @@ static void readCoordinate(const std::string &prompt, float &value) {
     while(true) {
         std::cout << prompt;
 
-        if (std::cin >> value) {
+        if (std::cin >> value && value >= 0 && value <= 100) {
             break;
         }
 
@@ -79,7 +79,7 @@ int main(int argc, const char **argv)
     // RoutePlanner object below in place of 10, 10, 90, 90.
 
     float start_x, start_y, end_x, end_y;
-    std::cout << "Enter the coordinates of the start and end points as prompted:" << std::endl;
+    std::cout << "Enter the coordinates of the start and end points as prompted (value of each coordiante sould be in the range [0, 100]):" << std::endl;
     
     readCoordinate("Enter start_x ", start_x);
     readCoordinate("Enter start_y ", start_y);
