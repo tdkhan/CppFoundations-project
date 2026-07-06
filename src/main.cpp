@@ -86,7 +86,7 @@ int main(int argc, const char **argv)
     readCoordinate("Enter end_x ", end_x);
     readCoordinate("Enter end_y ", end_y);
 
-    // print the input data for user confirmation
+    // debug: print the input data for user confirmation
     std::cout << "\nSetting up the router planner with the following data: \n";
     std::cout << "start_x, start_y: " << start_x << ", " << start_y << std::endl;
     std::cout << "end_x, end_y: " << end_x << ", " << end_y << std::endl;
