@@ -87,9 +87,9 @@ int main(int argc, const char **argv)
     readCoordinate("Enter end_y ", end_y);
 
     // debug: print the input data for user confirmation
-    std::cout << "\nSetting up the router planner with the following data: \n";
-    std::cout << "start_x, start_y: " << start_x << ", " << start_y << std::endl;
-    std::cout << "end_x, end_y: " << end_x << ", " << end_y << std::endl;
+    // std::cout << "\nSetting up the router planner with the following data: \n";
+    // std::cout << "start_x, start_y: " << start_x << ", " << start_y << std::endl;
+    // std::cout << "end_x, end_y: " << end_x << ", " << end_y << std::endl;
 
     RoutePlanner route_planner{model, start_x, start_y, end_x, end_y};
     route_planner.AStarSearch();
