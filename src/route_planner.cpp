@@ -39,31 +39,38 @@ float RoutePlanner::CalculateHValue(RouteModel::Node const *node) {
 // - For each node in current_node.neighbors, add the neighbor to open_list and set the node's visited attribute to true.
 
 void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
-    // set current node as visited
-    current_node->visited = true;
-
-    // adding neighbors for the current node
+    // adding neighbors for the current node (expected implemntation: comment this out when usign the optimal version)
     current_node->FindNeighbors();
     for (RouteModel::Node *neighbor : current_node->neighbors) {
-        // check if neighbor already visited
+        if (!neighbor->visited) {
+            neighbor->h_value = CalculateHValue(neighbor);
+            neighbor->g_value = current_node->g_value + neighbor->distance(*current_node);
+            neighbor->parent = current_node;
+            open_list.push_back(neighbor);
+            neighbor->visited = true;
+        }
+    }
+
+    /*// Optimal implementation: allows duplicate insertion in the open_list but every subsequent insertion is guranteed to have a lower g_value (this gives a shorter path).
+    // Uncomment the commented code in AStarSearch() functions for this optimal implementation.
+    current_node->FindNeighbors();
+    for (RouteModel::Node *neighbor : current_node->neighbors) {
+        // check if neighbor already visited (i.e that it has been poped from the open_list before)
         if (neighbor->visited == true) {
             continue;
         }
 
         // calculate the tentaive g cost
-        float tentaive_g_value = current_node->g_value + neighbor->distance(*current_node);
+        float tentative_g_value = current_node->g_value + neighbor->distance(*current_node);
 
-        if (!neighbor->parent || tentaive_g_value < neighbor->g_value) {
+        // add neighbors only if it is being considered for the very first time or if the tentaive g_value is less than the existing one.
+        if (!neighbor->parent || tentative_g_value < neighbor->g_value) {
             neighbor->h_value = CalculateHValue(neighbor);
-            neighbor->g_value = tentaive_g_value;
+            neighbor->g_value = tentative_g_value;
             neighbor->parent = current_node;
             open_list.push_back(neighbor);
-
-            // std::cout << neighbor->g_value << "      " << neighbor->h_value << std::endl;
         }
-    }
-/*    int x;
-    std::cin>>x;*/
+    }*/
 }
 
 
@@ -131,7 +138,21 @@ std::vector<RouteModel::Node> RoutePlanner::ConstructFinalPath(RouteModel::Node 
 
 void RoutePlanner::AStarSearch() {
     RouteModel::Node *current_node = nullptr;
+
+    // TODO: Implement your solution here. (expected implemntation: comment this out when usign the optimal version)
     open_list.push_back(start_node);
+    start_node->visited = true;
+    while (!open_list.empty()) {
+        current_node = NextNode();
+        if (current_node == end_node) {
+            break;
+        }
+        AddNeighbors(current_node);
+    }
+
+    // Optimal implementation: using visited to close nodes popped from the open_list (this gives a shorter path).
+    // Uncomment the commented code in AddNeighbors() functions for this optimal implementation.
+    /*open_list.push_back(start_node);
     // TODO: Implement your solution here.
     while (!open_list.empty()) {
         current_node = NextNode();
@@ -141,7 +162,11 @@ void RoutePlanner::AStarSearch() {
         if (current_node->visited == true) {
             continue;
         }
+        // set current node as visited
+        current_node->visited = true;
         AddNeighbors(current_node);
-    }
+    }*/
+
+    // reconstruct the path
     m_Model.path = ConstructFinalPath(current_node);
 }
