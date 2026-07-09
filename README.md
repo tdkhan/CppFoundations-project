@@ -205,6 +205,59 @@ _Instructions are listed in the Udacity course._
 * [libpng-dev](https://packages.debian.org/sid/libpng-dev) - PNG file format library for image handling
 * [libxkbcommon-dev](https://packages.debian.org/sid/libxkbcommon-dev) - Keyboard handling library required by IO2D
 
+## Note on A* Implementation Optimization
+
+The implementation expected by the Udacity project is functional, but it is **not optimal** in how it manages node visitation during the A* search.
+
+### Issue with the Expected Approach
+
+In the default Udacity solution:
+
+* Neighboring nodes are marked as `visited = true` **immediately when they are added to the open list**.
+* The `visited` flag is therefore used to **prevent nodes from being added to the open list more than once**.
+
+This approach can lead to **suboptimal paths**, because:
+
+* A node may be added to the open list via a longer path first.
+* If a shorter path to that same node is found later, it will be ignored since the node is already marked as visited.
+
+As a result, the algorithm may fail to explore better alternatives and produce a longer-than-optimal route.
+
+### Improved Approach
+
+In the current implementation:
+
+* The `visited` attribute is used to represent the **closed set**, as in the standard A* algorithm.
+* Nodes are marked as `visited = true` **only when they are removed from the open list**, meaning they are fully explored.
+
+This ensures:
+
+* Nodes can be revisited if a shorter path is found before they are finalized
+* Proper comparison of multiple candidate paths
+* **More optimal final routes**
+
+### Comparison
+
+Below is a comparison between the two approaches using the same coordinates:
+
+* **Start:** (10, 10)
+* **End:** (90, 90)
+
+| Implementation        | Path Visualization                                                 | Path Length      |
+| --------------------- | ------------------------------------------------------------------ | ---------------- |
+| Udacity Expected      | ![Udacity Path](instruction_images/map_routed.png)                 | 873.42 meters    |
+| Optimized             | ![Optimized Path](instruction_images/map_routed_optimal.png)       | 872.62 meters    |
+
+### Code Changes
+
+The original Udacity implementation has been commented out and replaced with the optimized version:
+
+* **File:** `src/route_planner.cpp`
+
+**Modified Sections:**
+
+* `AddNeighbors()` → Lines 44–54 (original implementation commented out)
+* `AStarSearch()` → Lines 147–156 (original implementation commented out)
 
 ## License
 
