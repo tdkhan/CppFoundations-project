@@ -26,8 +26,7 @@ RoutePlanner::RoutePlanner(RouteModel &model, float start_x, float start_y, floa
 
 float RoutePlanner::CalculateHValue(RouteModel::Node const *node) {
     // h value: distance of a node from the end node
-    float HValue = node->distance(*end_node);
-    return HValue;    
+    return node->distance(*end_node);   
 }
 
 
@@ -39,7 +38,10 @@ float RoutePlanner::CalculateHValue(RouteModel::Node const *node) {
 // - For each node in current_node.neighbors, add the neighbor to open_list and set the node's visited attribute to true.
 
 void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
-    // adding neighbors for the current node (expected implemntation: comment this out when usign the optimal version)
+
+    // ************ UDACITY IMPLEMENTATION ************
+    // Uses visited to prevent duplicate insertion in open_list
+    /*// adding neighbors for the current node
     current_node->FindNeighbors();
     for (RouteModel::Node *neighbor : current_node->neighbors) {
         if (!neighbor->visited) {
@@ -49,10 +51,11 @@ void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
             open_list.push_back(neighbor);
             neighbor->visited = true;
         }
-    }
+    }*/
 
-    /*// Optimal implementation: allows duplicate insertion in the open_list but every subsequent insertion is guranteed to have a lower g_value (this gives a shorter path).
-    // Uncomment the commented code in AStarSearch() functions for this optimal implementation.
+    // ************ OPTIMAL IMPLEMENTATION ************
+    // Allows duplicate insertion in the open_list but every subsequent insertion is guranteed to have a lower g_value (this gives a shorter path).
+    // uses visited to close nodes popped from the open_list
     current_node->FindNeighbors();
     for (RouteModel::Node *neighbor : current_node->neighbors) {
         // check if neighbor already visited (i.e that it has been poped from the open_list before)
@@ -70,7 +73,7 @@ void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
             neighbor->parent = current_node;
             open_list.push_back(neighbor);
         }
-    }*/
+    }
 }
 
 
@@ -139,7 +142,9 @@ std::vector<RouteModel::Node> RoutePlanner::ConstructFinalPath(RouteModel::Node 
 void RoutePlanner::AStarSearch() {
     RouteModel::Node *current_node = nullptr;
 
-    // TODO: Implement your solution here. (expected implemntation: comment this out when usign the optimal version)
+    // ************ UDACITY IMPLEMENTATION ************
+    // Uses visited to prevent duplicate insertion in open_list
+    /*// TODO: Implement your solution here.
     open_list.push_back(start_node);
     start_node->visited = true;
     while (!open_list.empty()) {
@@ -148,12 +153,12 @@ void RoutePlanner::AStarSearch() {
             break;
         }
         AddNeighbors(current_node);
-    }
+    }*/
 
-    // Optimal implementation: using visited to close nodes popped from the open_list (this gives a shorter path).
-    // Uncomment the commented code in AddNeighbors() functions for this optimal implementation.
-    /*open_list.push_back(start_node);
-    // TODO: Implement your solution here.
+    // ************ OPTIMAL IMPLEMENTATION ************
+    // Allows duplicate insertion in the open_list but every subsequent insertion is guranteed to have a lower g_value (this gives a shorter path).
+    // uses visited to close nodes popped from the open_list
+    open_list.push_back(start_node);
     while (!open_list.empty()) {
         current_node = NextNode();
         if (current_node == end_node) {
@@ -165,8 +170,8 @@ void RoutePlanner::AStarSearch() {
         // set current node as visited
         current_node->visited = true;
         AddNeighbors(current_node);
-    }*/
+    }
 
-    // reconstruct the path
+    // reconstruct the path 
     m_Model.path = ConstructFinalPath(current_node);
 }

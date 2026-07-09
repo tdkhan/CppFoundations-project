@@ -79,14 +79,14 @@ int main(int argc, const char **argv)
     // RoutePlanner object below in place of 10, 10, 90, 90.
 
     float start_x, start_y, end_x, end_y;
-    std::cout << "Enter the coordinates of the start and end points as prompted (value of each coordiante sould be in the range [0, 100]):" << std::endl;
+    std::cout << "Enter start and end coordinates.\nEach value should be in the range [0, 100]." << std::endl;
     
     readCoordinate("Enter start_x ", start_x);
     readCoordinate("Enter start_y ", start_y);
     readCoordinate("Enter end_x ", end_x);
     readCoordinate("Enter end_y ", end_y);
 
-    // debug: print the input data for user confirmation
+    // debug: print the input data for confirmation
     // std::cout << "\nSetting up the router planner with the following data: \n";
     // std::cout << "start_x, start_y: " << start_x << ", " << start_y << std::endl;
     // std::cout << "end_x, end_y: " << end_x << ", " << end_y << std::endl;
